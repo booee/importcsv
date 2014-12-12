@@ -85,46 +85,45 @@ $(document).ready(function() {
 	}
 
 	function loadFileContentIntoPage(fileContent) {
-		var $table = $('#importTable');
-		$table.html('');
 
-		var htmlOutput = '<table>';
-		htmlOutput += generateTableHeadersHtml(fileContent.headers);
-		htmlOutput += generateTableBodyHtml(fileContent);
-		htmlOutput += '</table>';
+		var $table = $('<table></table>');
+		$table.append(getTableHeadersHtml(fileContent.headers));
+		$table.append(generateTableBodyHtml(fileContent));
 
-		$table.html(htmlOutput);
+		var $tableDiv = $('#importTable').html($table);
 	}
 
-	function generateTableHeadersHtml(headers) {
-		var output = '<thead>';
-		for(var i = 0, len = headers.length; i < len; i++) {
-			output += '<th>' + headers[i] + '</th>';
-		}
-		output += '</thead>';
+	function getTableHeadersHtml(headers) {
+		var $thead = $('<thead></thead>');
 
-		return output;
+		for(var i = 0, len = headers.length; i < len; i++) {
+			var $th = $('<th></th>').text(headers[i]);
+			$thead.append($th);
+		}
+
+		return $thead;
 	}
 
 	function generateTableBodyHtml(fileContent) {
+		var $tbody = $('<tbody></tbody>');
 		var headers = fileContent.headers;
 
-		var output = '<tbody>';
 		for(var i = 0, len = fileContent.length; i < len; i++) {
 			var row = fileContent[i];
-			output += '<tr>'
+			$tr = $('<tr></tr>');
 
 			for(var j = 0, hLen = headers.length; j < hLen; j++) {
 				var header = headers[j];
 				var rowValue = row[header] || '';
-				output += '<td>' + rowValue + '</td>';
+				$td = $('<td></td>').text(rowValue);
+				$tr.append($td);
 			}
 
-			output += '</tr>';
+			$tbody.append($tr);
 		}
-		output += '</tbody>';
 
-		return output;
+
+		return $tbody;
 	}
 
 	function showErrorMessage(text) {
